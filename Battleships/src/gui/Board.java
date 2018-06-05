@@ -8,6 +8,7 @@ package gui;
 import battleships.BattleField;
 import battleships.Ships;
 import battleships.database;
+import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -18,6 +19,7 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -36,6 +38,7 @@ public class Board extends javax.swing.JFrame {
     public Board() {
         battleShip = new Ships();
         initComponents();
+//        addBGImage();
 //        try {
 //            img = ImageIO.read(new File("battleshippic.jpg"));
 //        } catch (IOException e) {
@@ -49,6 +52,33 @@ public class Board extends javax.swing.JFrame {
         createShipField();
         //jbuttonNewGame.setVisible(false);
     }
+    
+     public void addBGImage() {
+        // elsewhere
+        BufferedImage myImage;
+        try {
+            myImage = ImageIO.read(new File("battleshippic.jpg"));
+            setContentPane(new ImagePanel(myImage));
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());
+        }
+
+
+        }
+    class ImagePanel extends JComponent {
+
+        private Image image;
+
+        public ImagePanel(Image image) {
+            this.image = image;
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            g.drawImage(image, 0, 0, this);
+        }
+    }   
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -380,9 +410,9 @@ public class Board extends javax.swing.JFrame {
                             player2buttons[x][y].setEnabled(false);
                         }
                     }                  
-                    String name = JOptionPane.showInputDialog("Enter your name");
+                    playerName = JOptionPane.showInputDialog("Enter your name");
                     database dconn = new database(); 
-                    dconn.insertNewScore(name, battleShip.getPlayerMoves(battleShip.getPlayer()));
+                    dconn.insertNewScore(playerName, battleShip.getPlayerMoves(battleShip.getPlayer()));
                     return;
                 }
                 jLabelTurn.setText("It's Player 2's Turn!");
@@ -408,9 +438,9 @@ public class Board extends javax.swing.JFrame {
                             player2buttons[x][y].setEnabled(false);
                         }
                     }  
-                    String name = JOptionPane.showInputDialog("Enter your name");
+                    playerName = JOptionPane.showInputDialog("Enter your name");
                     database dconn = new database(); 
-                    dconn.insertNewScore(name, battleShip.getPlayerMoves(battleShip.getPlayer()));                    
+                    dconn.insertNewScore(playerName, battleShip.getPlayerMoves(battleShip.getPlayer()));                    
                     return;
                 }                
                 jLabelTurn.setText("It's Player 1's Turn!");
